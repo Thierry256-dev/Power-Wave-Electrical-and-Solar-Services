@@ -20,15 +20,13 @@ window.addEventListener("scroll", () => {
   }
 });
 
-// Fade-in animation on scroll
-const fadeEls = document.querySelectorAll(
-  ".about-section, .products-section, .gallery-section, .contact-section"
-);
+// Fade-in animation on scroll (with .visible class)
+const fadeEls = document.querySelectorAll(".fade-in");
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add("fade-in");
+        entry.target.classList.add("visible");
       }
     });
   },
@@ -60,4 +58,152 @@ if (contactForm) {
     alert("Thank you for contacting us! We will get back to you soon.");
     contactForm.reset();
   });
+}
+
+// Hamburger menu toggle
+const hamburger = document.querySelector(".nav-hamburger");
+const navLinksMenu = document.querySelector(".nav-links");
+hamburger.addEventListener("click", () => {
+  navLinksMenu.classList.toggle("open");
+});
+hamburger.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") navLinksMenu.classList.toggle("open");
+});
+navLinksMenu.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => {
+    navLinksMenu.classList.remove("open");
+  });
+});
+
+// Scroll-triggered fade/slide-in animations
+const animatedEls = document.querySelectorAll(".fade-in, .slide-in");
+const observer2 = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
+    });
+  },
+  { threshold: 0.2 }
+);
+animatedEls.forEach((el) => observer2.observe(el));
+
+// Back-to-top button logic
+const backToTopBtn = document.querySelector(".back-to-top");
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    backToTopBtn.classList.add("visible");
+  } else {
+    backToTopBtn.classList.remove("visible");
+  }
+});
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// Theme switcher logic
+const themeBtn = document.querySelector(".theme-switcher");
+const body = document.body;
+let theme = localStorage.getItem("theme") || "default";
+function applyTheme(t) {
+  body.classList.remove("light-theme", "dark-theme");
+  if (t === "light") body.classList.add("light-theme");
+  else if (t === "dark") body.classList.add("dark-theme");
+}
+applyTheme(theme);
+themeBtn.addEventListener("click", () => {
+  if (body.classList.contains("light-theme")) {
+    theme = "dark";
+  } else if (body.classList.contains("dark-theme")) {
+    theme = "default";
+  } else {
+    theme = "light";
+  }
+  localStorage.setItem("theme", theme);
+  applyTheme(theme);
+  themeBtn.innerHTML = body.classList.contains("dark-theme")
+    ? '<i class="fa-solid fa-sun"></i>'
+    : '<i class="fa-solid fa-moon"></i>';
+});
+themeBtn.innerHTML = body.classList.contains("dark-theme")
+  ? '<i class="fa-solid fa-sun"></i>'
+  : '<i class="fa-solid fa-moon"></i>';
+
+// FAQ accordion logic
+const faqItems = document.querySelectorAll(".faq-item");
+faqItems.forEach((item) => {
+  const question = item.querySelector(".faq-question");
+  question.addEventListener("click", () => {
+    item.classList.toggle("open");
+    faqItems.forEach((other) => {
+      if (other !== item) other.classList.remove("open");
+    });
+  });
+});
+
+// AI Assistant Chat Widget Logic
+const aiWidget = document.querySelector(".ai-chat-widget");
+const aiBtn = document.querySelector(".ai-chat-btn");
+const aiWindow = document.querySelector(".ai-chat-window");
+const aiClose = document.querySelector(".ai-chat-close");
+const aiForm = document.querySelector(".ai-chat-form");
+const aiInput = document.querySelector(".ai-chat-input");
+const aiMessages = document.querySelector(".ai-chat-messages");
+aiBtn.addEventListener("click", () => {
+  aiWidget.classList.toggle("open");
+  aiInput.focus();
+});
+aiClose.addEventListener("click", () => {
+  aiWidget.classList.remove("open");
+});
+aiForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const userMsg = aiInput.value.trim();
+  if (!userMsg) return;
+  addMessage("user", userMsg);
+  aiInput.value = "";
+  setTimeout(() => {
+    addMessage("ai", getAIResponse(userMsg));
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+  }, 700);
+});
+function addMessage(sender, text) {
+  const msgDiv = document.createElement("div");
+  msgDiv.className = "ai-chat-message " + sender;
+  msgDiv.textContent = text;
+  aiMessages.appendChild(msgDiv);
+  aiMessages.scrollTop = aiMessages.scrollHeight;
+}
+function getAIResponse(msg) {
+  msg = msg.toLowerCase();
+  if (msg.includes("product") || msg.includes("offer")) {
+    return "We offer electrical cables, sockets, switches, LED lights, security cameras, solar panels, batteries, inverters, and more.";
+  }
+  if (msg.includes("install") || msg.includes("service")) {
+    return "Yes, we provide professional installation and maintenance for all our electrical and solar products.";
+  }
+  if (
+    msg.includes("contact") ||
+    msg.includes("phone") ||
+    msg.includes("email")
+  ) {
+    return "You can reach us at powerplus520@gmail.com or call 0706022710 / 0778488424.";
+  }
+  if (msg.includes("location") || msg.includes("address")) {
+    return "We are located in Bweyogerere, Uganda.";
+  }
+  if (msg.includes("quote") || msg.includes("consult")) {
+    return "Please use our contact form or WhatsApp to request a free quote or consultation.";
+  }
+  if (msg.includes("solar") || msg.includes("energy")) {
+    return "We provide solar panels, batteries, inverters, and energy-efficient solutions for homes and businesses.";
+  }
+  if (msg.includes("security")) {
+    return "We offer security cameras, surveillance systems, and security fences for your safety.";
+  }
+  if (msg.includes("price") || msg.includes("cost")) {
+    return "We offer competitive pricing on all our products and services. Please contact us for a detailed quote.";
+  }
+  return "I am here to help with any questions about our products, services, or contact info!";
 }
