@@ -193,5 +193,8 @@ function getAIResponse(msg) {
   if (msg.includes("price") || msg.includes("cost")) {
     return "We offer competitive pricing on all our products and services. Please contact us for a detailed quote.";
   }
+  if (msg.includes("hello") || msg.includes("hi") || msg.includes("hey")) {
+    return "Hello! How can I assist you today?";
+  }
   return "I am here to help with any questions about our products, services, or contact info!";
 }
