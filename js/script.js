@@ -3,22 +3,25 @@ const navLinks = document.querySelectorAll(".nav-links a");
 navLinks.forEach((link) => {
   link.addEventListener("click", function (e) {
     const href = this.getAttribute("href");
-    if (href.startsWith("#")) {
+    if (href && href.startsWith("#")) {
       e.preventDefault();
-      document.querySelector(href).scrollIntoView({ behavior: "smooth" });
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: "smooth" });
     }
   });
 });
 
 // Sticky nav shadow on scroll
 const navbar = document.querySelector(".navbar");
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 40) {
-    navbar.classList.add("nav-scrolled");
-  } else {
-    navbar.classList.remove("nav-scrolled");
-  }
-});
+if (navbar) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 40) {
+      navbar.classList.add("nav-scrolled");
+    } else {
+      navbar.classList.remove("nav-scrolled");
+    }
+  });
+}
 
 // Fade-in animation on scroll (with .visible class)
 const fadeEls = document.querySelectorAll(".fade-in");
@@ -37,13 +40,15 @@ fadeEls.forEach((el) => observer.observe(el));
 // Lightbox for gallery
 const galleryImgs = document.querySelectorAll(".gallery-img");
 galleryImgs.forEach((img) => {
+  // Ensure lazy loading is applied if not present
+  if (!img.hasAttribute("loading")) img.setAttribute("loading", "lazy");
   img.addEventListener("click", () => {
     const lightbox = document.createElement("div");
     lightbox.className = "lightbox";
-    lightbox.innerHTML = `<img src='${img.src}' alt='${img.alt}'><span style='position:absolute;top:24px;right:32px;font-size:2rem;color:#FFD700;cursor:pointer;'>&times;</span>`;
+    lightbox.innerHTML = `<img src='${img.src}' alt='${img.alt}'><span style='position:absolute;top:24px;right:32px;font-size:2rem;color:#FFD700;cursor:pointer;' role='button' aria-label='Close'>&times;</span>`;
     document.body.appendChild(lightbox);
-    lightbox.querySelector("span").onclick = () =>
-      document.body.removeChild(lightbox);
+    const closeBtn = lightbox.querySelector("span");
+    if (closeBtn) closeBtn.onclick = () => document.body.removeChild(lightbox);
     lightbox.onclick = (e) => {
       if (e.target === lightbox) document.body.removeChild(lightbox);
     };
@@ -60,20 +65,29 @@ if (contactForm) {
   });
 }
 
-// Hamburger menu toggle
+// Hamburger menu toggle (with aria-expanded updates)
 const hamburger = document.querySelector(".nav-hamburger");
 const navLinksMenu = document.querySelector(".nav-links");
-hamburger.addEventListener("click", () => {
-  navLinksMenu.classList.toggle("open");
-});
-hamburger.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") navLinksMenu.classList.toggle("open");
-});
-navLinksMenu.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => {
-    navLinksMenu.classList.remove("open");
+if (hamburger && navLinksMenu) {
+  function toggleMenu(open) {
+    navLinksMenu.classList.toggle(
+      "open",
+      open === undefined ? !navLinksMenu.classList.contains("open") : open
+    );
+    const isOpen = navLinksMenu.classList.contains("open");
+    hamburger.setAttribute("aria-expanded", String(isOpen));
+  }
+  hamburger.addEventListener("click", () => toggleMenu());
+  hamburger.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") toggleMenu();
   });
-});
+  navLinksMenu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      navLinksMenu.classList.remove("open");
+      hamburger.setAttribute("aria-expanded", "false");
+    });
+  });
+}
 
 // Scroll-triggered fade/slide-in animations
 const animatedEls = document.querySelectorAll(".fade-in, .slide-in");
@@ -91,44 +105,48 @@ animatedEls.forEach((el) => observer2.observe(el));
 
 // Back-to-top button logic
 const backToTopBtn = document.querySelector(".back-to-top");
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 300) {
-    backToTopBtn.classList.add("visible");
-  } else {
-    backToTopBtn.classList.remove("visible");
-  }
-});
-backToTopBtn.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+if (backToTopBtn) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.add("visible");
+    } else {
+      backToTopBtn.classList.remove("visible");
+    }
+  });
+  backToTopBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
 
 // Theme switcher logic
 const themeBtn = document.querySelector(".theme-switcher");
-const body = document.body;
+const bodyEl = document.body;
 let theme = localStorage.getItem("theme") || "default";
 function applyTheme(t) {
-  body.classList.remove("light-theme", "dark-theme");
-  if (t === "light") body.classList.add("light-theme");
-  else if (t === "dark") body.classList.add("dark-theme");
+  bodyEl.classList.remove("light-theme", "dark-theme");
+  if (t === "light") bodyEl.classList.add("light-theme");
+  else if (t === "dark") bodyEl.classList.add("dark-theme");
 }
 applyTheme(theme);
-themeBtn.addEventListener("click", () => {
-  if (body.classList.contains("light-theme")) {
-    theme = "dark";
-  } else if (body.classList.contains("dark-theme")) {
-    theme = "default";
-  } else {
-    theme = "light";
-  }
-  localStorage.setItem("theme", theme);
-  applyTheme(theme);
-  themeBtn.innerHTML = body.classList.contains("dark-theme")
+if (themeBtn) {
+  themeBtn.addEventListener("click", () => {
+    if (bodyEl.classList.contains("light-theme")) {
+      theme = "dark";
+    } else if (bodyEl.classList.contains("dark-theme")) {
+      theme = "default";
+    } else {
+      theme = "light";
+    }
+    localStorage.setItem("theme", theme);
+    applyTheme(theme);
+    themeBtn.innerHTML = bodyEl.classList.contains("dark-theme")
+      ? '<i class="fa-solid fa-sun"></i>'
+      : '<i class="fa-solid fa-moon"></i>';
+  });
+  themeBtn.innerHTML = bodyEl.classList.contains("dark-theme")
     ? '<i class="fa-solid fa-sun"></i>'
     : '<i class="fa-solid fa-moon"></i>';
-});
-themeBtn.innerHTML = body.classList.contains("dark-theme")
-  ? '<i class="fa-solid fa-sun"></i>'
-  : '<i class="fa-solid fa-moon"></i>';
+}
 
 // FAQ accordion logic
 const faqItems = document.querySelectorAll(".faq-item");
