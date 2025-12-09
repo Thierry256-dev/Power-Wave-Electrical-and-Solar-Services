@@ -118,36 +118,6 @@ if (backToTopBtn) {
   });
 }
 
-// Theme switcher logic
-const themeBtn = document.querySelector(".theme-switcher");
-const bodyEl = document.body;
-let theme = localStorage.getItem("theme") || "default";
-function applyTheme(t) {
-  bodyEl.classList.remove("light-theme", "dark-theme");
-  if (t === "light") bodyEl.classList.add("light-theme");
-  else if (t === "dark") bodyEl.classList.add("dark-theme");
-}
-applyTheme(theme);
-if (themeBtn) {
-  themeBtn.addEventListener("click", () => {
-    if (bodyEl.classList.contains("light-theme")) {
-      theme = "dark";
-    } else if (bodyEl.classList.contains("dark-theme")) {
-      theme = "default";
-    } else {
-      theme = "light";
-    }
-    localStorage.setItem("theme", theme);
-    applyTheme(theme);
-    themeBtn.innerHTML = bodyEl.classList.contains("dark-theme")
-      ? '<i class="fa-solid fa-sun"></i>'
-      : '<i class="fa-solid fa-moon"></i>';
-  });
-  themeBtn.innerHTML = bodyEl.classList.contains("dark-theme")
-    ? '<i class="fa-solid fa-sun"></i>'
-    : '<i class="fa-solid fa-moon"></i>';
-}
-
 // FAQ accordion logic
 const faqItems = document.querySelectorAll(".faq-item");
 faqItems.forEach((item) => {
