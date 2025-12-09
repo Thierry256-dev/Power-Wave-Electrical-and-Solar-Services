@@ -16,6 +16,9 @@ body.dark-theme {
   --footer-bg: #0d1b2a;
   --footer-text: #ffd700;
 }
+body {
+  background: var(--footer-bg);
+}
 .theme-switcher {
   position: fixed;
   top: 24px;
@@ -59,6 +62,9 @@ body {
   width: 90%;
   max-width: 1200px;
   margin: 0 auto;
+}
+.product-container {
+  color: var(--footer-bg);
 }
 .navbar {
   position: sticky;
