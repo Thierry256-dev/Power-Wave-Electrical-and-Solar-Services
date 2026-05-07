@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -36,12 +36,17 @@
           <span class="logo-sub">ELECTRICAL AND SOLAR SERVICES</span>
         </a>
         <ul class="nav-links">
+          <div class="nav-close" aria-label="Close menu">
+            <i class="fa-solid fa-xmark"></i>
+          </div>
           <li><a href="#home">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#products">Products</a></li>
           <li><a href="#gallery">Gallery</a></li>
           <li><a href="#contact">Contact</a></li>
+          <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
         </ul>
+        <div class="nav-overlay"></div>
         <button
           class="nav-hamburger"
           aria-label="Toggle menu"
@@ -274,6 +279,63 @@
       </div>
     </section>
 
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials-section fade-in">
+      <div class="container">
+        <h2>What Our Clients Say</h2>
+        <p class="testimonials-subtitle">
+          Trusted by hundreds of satisfied customers across Uganda
+        </p>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+              "Power Wave provided excellent service for our office electrical
+              installation. Professional, timely, and very affordable. Highly
+              recommended!"
+            </p>
+            <p class="testimonial-author">— Margaret Ssewava, Kampala</p>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+              "Our solar installation was flawless. The team was knowledgeable
+              and explained everything clearly. Our electricity bills have
+              reduced significantly."
+            </p>
+            <p class="testimonial-author">— John Mukisa, Wakiso</p>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+              "Excellent products and outstanding customer support. Power Wave
+              is my go-to for all electrical and solar needs. They really care
+              about their customers."
+            </p>
+            <p class="testimonial-author">— Ruth Namwase, Fort Portal</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- FAQ Section -->
     <section id="faq" class="faq-section fade-in">
       <div class="container">
@@ -399,6 +461,11 @@
         &copy; 2026 POWER WAVE ELECTRICAL AND SOLAR SERVICES
       </div>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" aria-label="Back to top">
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
 
     <!-- AI Assistant Chat Widget -->
     <div class="ai-chat-widget">

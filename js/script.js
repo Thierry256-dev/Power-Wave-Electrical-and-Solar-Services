@@ -1,3 +1,18 @@
+// Initialize smooth scroll for page load
+document.addEventListener("DOMContentLoaded", function () {
+  // Add initial fade-in to hero content
+  const heroContent = document.querySelector(".hero-content");
+  if (heroContent) {
+    heroContent.style.opacity = "0";
+    heroContent.style.transform = "translateY(20px)";
+    setTimeout(() => {
+      heroContent.style.transition = "all 1s ease-out";
+      heroContent.style.opacity = "1";
+      heroContent.style.transform = "translateY(0)";
+    }, 100);
+  }
+});
+
 // Smooth scroll for nav links
 const navLinks = document.querySelectorAll(".nav-links a");
 navLinks.forEach((link) => {
@@ -33,7 +48,7 @@ const observer = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.2 }
+  { threshold: 0.2 },
 );
 fadeEls.forEach((el) => observer.observe(el));
 
@@ -55,37 +70,130 @@ galleryImgs.forEach((img) => {
   });
 });
 
-// Contact form basic validation
+// Contact form enhanced validation and feedback
 const contactForm = document.querySelector(".contact-form");
 if (contactForm) {
   contactForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    alert("Thank you for contacting us! We will get back to you soon.");
+
+    // Get form fields
+    const nameInput = document.querySelector("#name");
+    const emailInput = document.querySelector("#email");
+    const phoneInput = document.querySelector("#phone");
+    const messageInput = document.querySelector("#message");
+
+    // Basic validation
+    if (
+      !nameInput.value.trim() ||
+      !emailInput.value.trim() ||
+      !phoneInput.value.trim() ||
+      !messageInput.value.trim()
+    ) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    // Email validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(emailInput.value)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    // Show success message
+    const submitBtn = contactForm.querySelector("button[type='submit']");
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = "Message Sent ✓";
+    submitBtn.style.background =
+      "linear-gradient(135deg, #10b981 0%, #059669 100%)";
+
+    // Reset form
     contactForm.reset();
+
+    // Reset button after 3 seconds
+    setTimeout(() => {
+      submitBtn.textContent = originalText;
+      submitBtn.style.background = "";
+      alert("Thank you for contacting us! We will get back to you soon.");
+    }, 3000);
   });
 }
 
 // Hamburger menu toggle (with aria-expanded updates)
 const hamburger = document.querySelector(".nav-hamburger");
 const navLinksMenu = document.querySelector(".nav-links");
+const navClose = document.querySelector(".nav-close");
+const navOverlay = document.querySelector(".nav-overlay");
+
+function closeMenu() {
+  if (navLinksMenu && hamburger) {
+    navLinksMenu.classList.remove("open");
+    hamburger.classList.remove("active");
+    hamburger.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
+}
+
+function openMenu() {
+  if (navLinksMenu && hamburger) {
+    navLinksMenu.classList.add("open");
+    hamburger.classList.add("active");
+    hamburger.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  }
+}
+
 if (hamburger && navLinksMenu) {
   function toggleMenu(open) {
-    navLinksMenu.classList.toggle(
-      "open",
-      open === undefined ? !navLinksMenu.classList.contains("open") : open
-    );
-    const isOpen = navLinksMenu.classList.contains("open");
-    hamburger.setAttribute("aria-expanded", String(isOpen));
+    const isOpen =
+      open === undefined ? !navLinksMenu.classList.contains("open") : open;
+
+    if (isOpen) {
+      openMenu();
+    } else {
+      closeMenu();
+    }
   }
+
   hamburger.addEventListener("click", () => toggleMenu());
   hamburger.addEventListener("keypress", (e) => {
     if (e.key === "Enter") toggleMenu();
   });
+
+  // Close menu when a link is clicked
   navLinksMenu.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
-      navLinksMenu.classList.remove("open");
-      hamburger.setAttribute("aria-expanded", "false");
+      closeMenu();
     });
+  });
+
+  // Close button functionality
+  if (navClose) {
+    navClose.addEventListener("click", closeMenu);
+    navClose.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") closeMenu();
+    });
+  }
+
+  // Close menu when clicking on overlay
+  if (navOverlay) {
+    navOverlay.addEventListener("click", closeMenu);
+  }
+
+  // Close menu when clicking outside (on the rest of the page)
+  document.addEventListener("click", (e) => {
+    if (navLinksMenu.classList.contains("open")) {
+      if (!navLinksMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        closeMenu();
+      }
+    }
+  });
+
+  // Close menu on escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && navLinksMenu.classList.contains("open")) {
+      closeMenu();
+    }
   });
 }
 
@@ -99,7 +207,7 @@ const observer2 = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.2 }
+  { threshold: 0.2 },
 );
 animatedEls.forEach((el) => observer2.observe(el));
 
