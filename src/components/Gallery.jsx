@@ -1,34 +1,47 @@
-import { useState, useRef, useEffect } from 'react'
-import solarInstallImg from '../assets/images/solar installation.jpg'
-import electricalInstallImg from '../assets/images/electrical installation.jpg'
-import cameraControlImg from '../assets/images/camera contral.jpg'
-import chandelorsImg from '../assets/images/chandelors.jpg'
+import { useState, useRef, useEffect } from "react";
+import solarInstallImg from "../assets/images/solar installation.jpg";
+import electricalInstallImg from "../assets/images/electrical installation.jpg";
+import cameraControlImg from "../assets/images/camera contral.jpg";
+import chandelorsImg from "../assets/images/chandelors.jpg";
+import cables from "../assets/images/cables2.jpg";
+import firstHouse from "../assets/images/house1.jpg";
+import meterBox from "../assets/images/meterbox.jpg";
+import wallSwitch from "../assets/images/wallswitch.jpg";
 
 const galleryImages = [
-  { src: solarInstallImg, alt: 'Solar panel installation in Uganda' },
-  { src: electricalInstallImg, alt: 'Electrical wiring installation' },
-  { src: cameraControlImg, alt: 'Security camera control room' },
-  { src: chandelorsImg, alt: 'Chandelier lighting installation' },
-]
+  { src: cables, alt: "Second Cables installation" },
+  { src: solarInstallImg, alt: "Solar panel installation in Uganda" },
+  { src: firstHouse, alt: "Image1 of the house" },
+  { src: electricalInstallImg, alt: "Electrical wiring installation" },
+  { src: cameraControlImg, alt: "Security camera control room" },
+  { src: chandelorsImg, alt: "Chandelier lighting installation" },
+  { src: meterBox, alt: "Meter box installation" },
+  { src: wallSwitch, alt: "Wall switch installation" },
+];
 
 export default function Gallery() {
-  const [lightbox, setLightbox] = useState(null)
-  const ref = useRef(null)
+  const [lightbox, setLightbox] = useState(null);
+  const ref = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) entry.target.classList.add('opacity-100', 'translate-y-0') },
-      { threshold: 0.1 }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
+      ([entry]) => {
+        if (entry.isIntersecting)
+          entry.target.classList.add("opacity-100", "translate-y-0");
+      },
+      { threshold: 0.1 },
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') setLightbox(null) }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [])
+    const onKey = (e) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <section id="gallery" className="py-24 bg-[#f8f9fa]">
@@ -38,10 +51,15 @@ export default function Gallery() {
           ref={ref}
           className="text-center mb-14 opacity-0 translate-y-8 transition-all duration-700"
         >
-          <span className="inline-block mb-3 text-xs font-semibold tracking-[3px] uppercase" style={{ color: '#ffd700' }}>
+          <span
+            className="inline-block mb-3 text-xs font-semibold tracking-[3px] uppercase"
+            style={{ color: "#ffd700" }}
+          >
             Our Work
           </span>
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gradient">Gallery</h2>
+          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gradient">
+            Gallery
+          </h2>
           <p className="text-gray-500 text-lg max-w-lg mx-auto">
             A glimpse of our installations and completed projects across Uganda.
           </p>
@@ -62,11 +80,18 @@ export default function Gallery() {
                 className="w-full h-60 object-cover group-hover:scale-110 transition-transform duration-500"
               />
               {/* Overlay */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ background: 'rgba(20,33,61,0.7)' }}>
+              <div
+                className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{ background: "rgba(20,33,61,0.7)" }}
+              >
                 <div className="flex flex-col items-center gap-2 text-white">
-                  <i className="fa-solid fa-magnifying-glass-plus text-2xl" style={{ color: '#ffd700' }} />
-                  <span className="text-xs font-medium text-center px-3">{img.alt}</span>
+                  <i
+                    className="fa-solid fa-magnifying-glass-plus text-2xl"
+                    style={{ color: "#ffd700" }}
+                  />
+                  <span className="text-xs font-medium text-center px-3">
+                    {img.alt}
+                  </span>
                 </div>
               </div>
             </div>
@@ -98,5 +123,5 @@ export default function Gallery() {
         </div>
       )}
     </section>
-  )
+  );
 }
