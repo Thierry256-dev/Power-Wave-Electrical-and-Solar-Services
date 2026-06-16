@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Poppins', Arial, sans-serif;
+    background-color: #101828;
+    color: #222;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #14213d 0%, #ffd700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+    animation: heroFadeUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+  }
+
+  .nav-link-underline::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #ffd700;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+  }
+
+  .nav-link-underline:hover::after {
+    width: 100%;
+  }
+}
+
+@keyframes heroFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Lightbox overlay */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #101828;
+}
+::-webkit-scrollbar-thumb {
+  background: #ffd700;
+  border-radius: 3px;
+}
+
+/* Mobile menu slide */
+.mobile-menu-enter {
+  transform: translateX(100%);
+}
+.mobile-menu-enter-active {
+  transform: translateX(0);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
